@@ -115,11 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BinarySearch.cpp" />
     <ClCompile Include="src\InputValidationFunctions.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MergeSort.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BinarySearch.hpp" />
     <ClInclude Include="src\InputValidationFunctions.hpp" />
     <ClInclude Include="src\MergeSort.hpp" />
   </ItemGroup>

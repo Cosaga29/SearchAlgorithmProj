@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "MergeSort.hpp"
+#include "BinarySearch.hpp"
 #include "InputValidationFunctions.hpp"
 
 #define NUM_COUNT 10
@@ -15,40 +16,9 @@
 
 
 
-int search(int* arr, int size, int toFind);
+int linearSearch(int* arr, int size, int toFind);
 
-
-int bSearch(int* arr, int lowIndex, int highIndex, int toFind) {
-	if (lowIndex == highIndex) {
-		if (arr[lowIndex] == toFind) {
-			return lowIndex;
-		}
-		else {
-			return -1;
-		}
-	}
-	
-	//search top half/bottom half
-	int midPoint = highIndex + lowIndex / 2;
-	if (arr[midPoint] == toFind) {
-		return midPoint;
-	}
-
-	if (arr[midPoint] > toFind) {
-		return bSearch(arr, lowIndex, midPoint, toFind);
-	}
-	else {
-		return bSearch(arr, midPoint, highIndex, toFind);
-	}
-
-}
-
-int binarySearch(int* arr, int size, int toFind) {
-	return bSearch(arr, 0, size - 1, toFind);
-}
-
-
-bool isFound(int* arr, int size, int toFind);
+bool isFound(int* arr, int size, int toFind, int(*)(int*, int, int));
 
 void outputToFile(int* arr, int size, std::vector<std::string>& fileNames);
 
@@ -63,6 +33,7 @@ int main() {
 	int arr2[NUM_COUNT];
 	int arr3[NUM_COUNT];
 	int arr4[NUM_COUNT];
+
 
 
 	//Read values from files
@@ -99,16 +70,16 @@ int main() {
 	}
 
 
-	//display search results (LINEAR SEARCH)
+	//display linearSearch results (LINEAR SEARCH)
 	std::cout << "What is the target value? " << std::endl;
 
 
 	int toSearch = validateInput();
 	clearInputStream();
-	std::cout << startFile << ": " << results[isFound(arr1, NUM_COUNT, toSearch)] << std::endl;
-	std::cout << earlyFile << ": " << results[isFound(arr2, NUM_COUNT, toSearch)] << std::endl;
-	std::cout << midFile << ": " << results[isFound(arr3, NUM_COUNT, toSearch)] << std::endl;
-	std::cout << endFile << ": " << results[isFound(arr4, NUM_COUNT, toSearch)] << std::endl;
+	std::cout << startFile << ": " << results[isFound(arr1, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
+	std::cout << earlyFile << ": " << results[isFound(arr2, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
+	std::cout << midFile << ": " << results[isFound(arr3, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
+	std::cout << endFile << ": " << results[isFound(arr4, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
 
 
 	//sort arrays
@@ -124,21 +95,13 @@ int main() {
 	outputToFile(arr3, NUM_COUNT, userFileNameList);
 	outputToFile(arr4, NUM_COUNT, userFileNameList);
 
-	/*
-	for (int i = 0; i < userFileNameList.size(); i++) {
 
-		std::ifstream inputFile(userFileNameList[i].c_str());
-
-		std::cout << userFileNameList[i] << results
-
-
-
-
-	}
-	*/
+	//output results of binary search from files outputted by the user
+	std::cout << userFileNameList[0] << results[isFound(arr1, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[1] << results[isFound(arr2, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[2] << results[isFound(arr3, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[3] << results[isFound(arr4, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
 	
-
-
 
 
 	std::cin.get();
@@ -156,7 +119,7 @@ int main() {
 Searches through an array to find a number, returns -1 if number not found
 
 Param:
-	arr - array to search
+	arr - array to linearSearch
 	size - size of array
 	toFine - number to fine in the array
 
@@ -164,7 +127,7 @@ Param:
 Return:
 	int - index of found number
 */
-int search(int* arr, int size, int toFind) {
+int linearSearch(int* arr, int size, int toFind) {
 	for (int i = 0; i < size; i++) {
 		if (arr[i] == toFind) {
 			return i;
@@ -173,8 +136,8 @@ int search(int* arr, int size, int toFind) {
 	return -1;
 }
 
-bool isFound(int* arr, int size, int toFind) {
-	if (search(arr, size, toFind) == -1) {
+bool isFound(int* arr, int size, int toFind, int(*searchFunction)(int*, int, int)) {
+	if (searchFunction(arr, size, toFind) == -1) {
 		return false;
 	}
 	else {

@@ -24,12 +24,18 @@
     <ClCompile Include="src\InputValidationFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BinarySearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MergeSort.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\InputValidationFunctions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BinarySearch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
