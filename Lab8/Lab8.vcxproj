@@ -115,6 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputValidationFunctions.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MergeSort.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\InputValidationFunctions.hpp" />
+    <ClInclude Include="src\MergeSort.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
