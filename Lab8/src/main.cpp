@@ -1,6 +1,18 @@
+/*****************************************************
+Author: Martin Edmunds
+Assignment: Lab 8 
+Date: 02/27/19
+Description:
+
+Program to input numbers from text files, display the results
+of a user defined search, sort the arrays via mergeSort and
+display the results of a binary search on the sorted array.
+
+
+******************************************************/
+
+
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -9,11 +21,9 @@
 #include "BinarySearch.hpp"
 #include "InputValidationFunctions.hpp"
 
+
 #define NUM_COUNT 10
 #define NUM_OF_FILES 4
-
-#define log(x) std::cout << x << std::endl;
-
 
 
 int linearSearch(int* arr, int size, int toFind);
@@ -22,11 +32,11 @@ bool isFound(int* arr, int size, int toFind, int(*)(int*, int, int));
 
 void outputToFile(int* arr, int size, std::vector<std::string>& fileNames);
 
-
+/*
+Main function: create user prompt container, allocate space for storage arrays, input, search, sort, search, and output numbers
+*/
 int main() {
 	std::vector<std::string> userFileNameList;
-
-	srand(time(0));
 
 	//allocate space for storage arrays
 	int arr1[NUM_COUNT];
@@ -36,22 +46,22 @@ int main() {
 
 
 
-	//Read values from files
+	//Hardcoded files per assignment spec
 	std::string startFile = "nums.txt";
 	std::string earlyFile = "early.txt";
 	std::string midFile = "mid.txt";
 	std::string endFile = "end.txt";
 
-	//open all files
+	//open all files to be used for input
 	std::ifstream f1(startFile.c_str());
 	std::ifstream f2(earlyFile.c_str());
 	std::ifstream f3(midFile.c_str());
 	std::ifstream f4(endFile.c_str());
 
-	//create array to hold two prompts
+	//create array to hold two prompts to display search result
 	std::string results[2] = { "Target value not found", "Target value found" };
 
-	//read data from file into arrays
+	//if all files open successfully, read data from file into arrays
 	if (f1.good() && f2.good() && f3.good() && f4.good()) {
 
 		//read numbers from file into array
@@ -62,11 +72,18 @@ int main() {
 			f4 >> arr4[i];
 		}
 
+		//close opened resources
 		f1.close();
 		f2.close();
 		f3.close();
 		f4.close();
 
+	}
+	else {
+
+		std::cout << "A file could not be opened. " << std::endl;
+		std::cin.get();
+		return 0;
 	}
 
 
@@ -76,13 +93,16 @@ int main() {
 
 	int toSearch = validateInput();
 	clearInputStream();
+
+	//output the corresponding promp for the truth value returned by isFound
+	std::cout << std::endl;
 	std::cout << startFile << ": " << results[isFound(arr1, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
 	std::cout << earlyFile << ": " << results[isFound(arr2, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
 	std::cout << midFile << ": " << results[isFound(arr3, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
 	std::cout << endFile << ": " << results[isFound(arr4, NUM_COUNT, toSearch, &linearSearch)] << std::endl;
+	std::cout << std::endl;
 
-
-	//sort arrays
+	//sort arrays via mergeSort
 	mergeSort(arr1, NUM_COUNT);
 	mergeSort(arr2, NUM_COUNT);
 	mergeSort(arr3, NUM_COUNT);
@@ -97,10 +117,11 @@ int main() {
 
 
 	//output results of binary search from files outputted by the user
-	std::cout << userFileNameList[0] << results[isFound(arr1, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
-	std::cout << userFileNameList[1] << results[isFound(arr2, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
-	std::cout << userFileNameList[2] << results[isFound(arr3, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
-	std::cout << userFileNameList[3] << results[isFound(arr4, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << std::endl;
+	std::cout << userFileNameList[0] << ": " << results[isFound(arr1, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[1] << ": " << results[isFound(arr2, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[2] << ": " << results[isFound(arr3, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
+	std::cout << userFileNameList[3] << ": " << results[isFound(arr4, NUM_COUNT, toSearch, &binarySearch)] << std::endl;
 	
 
 
@@ -136,6 +157,22 @@ int linearSearch(int* arr, int size, int toFind) {
 	return -1;
 }
 
+
+
+/*
+Function that searches through an array using a search function determined by the searchFunction pointer
+TO BE USED WITH LINEAR SEARCH AND BINARY SEARCH FUNCTIONS
+
+Param:
+	arr - array to be searched
+	size - size of array to search
+	toFind - value to search for
+	searchFunction - function pointer to the search function the user wishes to use to search the array
+
+Return:
+	find result (-1 = false) (searchFunction needs to return a -1 for not found)
+
+*/
 bool isFound(int* arr, int size, int toFind, int(*searchFunction)(int*, int, int)) {
 	if (searchFunction(arr, size, toFind) == -1) {
 		return false;
@@ -146,6 +183,18 @@ bool isFound(int* arr, int size, int toFind, int(*searchFunction)(int*, int, int
 }
 
 
+
+/*
+Function designed to prompt a user for an output file, store the name of the file to be used for displaying purposes,
+output the current number being stored in the file, and write the number to the output file.
+
+Param:
+	arr - array to be written to file
+	size - size of array
+	fileNames - container of fileNames that will be entered by the user
+
+
+*/
 void outputToFile(int* arr, int size, std::vector<std::string>& fileNames) {
 
 	std::string outFile;

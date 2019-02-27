@@ -1,14 +1,38 @@
+/*****************************************************
+Author: Martin Edmunds
+Assignment: Lab 8
+Date: 02/27/19
+Description:
+
+Defines functions for the merge sort algorithm. Consists
+of combine function to merge two sorted sub arrays, and splitandmerge
+function that splits the array until each sub array is of size = 1, and
+defines a helper function to make usage of the merge sort algorithm easy.
+
+******************************************************/
+
+
 #include "MergeSort.hpp"
 
-//example: low index = 0; high index = 3 for arr[4]
+/*
+Merge sort helper function that handles the combining of the two sorted array halves.
+
+Param:
+	arr- array to be combined from
+	arrcpy - array to store the combined array results
+	lowIndex - low index of elements to be combined
+	midIndex - below mid index - 1st array, above - 2nd array
+	highIndex - high index of elements to be combined
+
+*/
 void combine(int* arr, int* arrcpy, int lowIndex, int midIndex, int highIndex) {
 
-	int i = lowIndex;				//index into lower half (starts at 0)
-	int j = midIndex + 1;	//index into upper half (starts at 2)
-	int k = 0;				//index into copy array (starts at 0)
+	int i = lowIndex;				//index into lower half
+	int j = midIndex + 1;	//index into upper half 
+	int k = 0;				//index into copy array 
 
-	while (i <= midIndex && j <= highIndex) {	//while i < 2, and j < 4
-		//compare elements 
+	while (i <= midIndex && j <= highIndex) {	//array indicies are valid
+		//compare elements, add whichever value compares lower
 		if (arr[i] <= arr[j]) {
 			arrcpy[k] = arr[i];
 			i++;
@@ -22,7 +46,7 @@ void combine(int* arr, int* arrcpy, int lowIndex, int midIndex, int highIndex) {
 	}
 
 
-	//add remaining elements 
+	//add remaining elements of the array that did NOT go out of bounds from above loop
 	while (i <= midIndex) {
 		arrcpy[k] = arr[i];
 		i++;
@@ -44,10 +68,18 @@ void combine(int* arr, int* arrcpy, int lowIndex, int midIndex, int highIndex) {
 
 }
 
+
+
 /*
 Function that splits the fed array until 1 element is in each set
 
 Recombines the split arrays into one sorted array
+
+Param:
+	arr - array to be sorted
+	arrcpy - array to contain intermitant sorted elements
+	lowIndex - lower sort bound
+	highIndex - upper sort bound
 */
 void splitAndMerge(int* arr, int* arrcpy, int lowIndex, int highIndex) {
 
@@ -70,6 +102,8 @@ void splitAndMerge(int* arr, int* arrcpy, int lowIndex, int highIndex) {
 
 /*
 Helper function to create and manage resources for copying and sorting the array
+Allows a user of the merge sort function to simply pass array and size without worrying about
+the resources for the copied array.
 
 Param:
 	arr - array to be sorted
