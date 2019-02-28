@@ -13,6 +13,8 @@ of combine function to merge two sorted sub arrays, and splitandmerge
 function that splits the array until each sub array is of size = 1, and
 defines a helper function to make usage of the merge sort algorithm easy.
 
+Source: https://www.geeksforgeeks.org/merge-sort/
+
 ******************************************************/
 
 
